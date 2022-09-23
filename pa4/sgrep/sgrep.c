@@ -10,8 +10,8 @@ Purpose:
 
 
 
-int checkFlags(char flagStr, int * c, int * o, int * i){
-  if(flagStr == 'c'){
+int checkFlags(char flagStr, int * e, int * o, int * i){
+  if(flagStr == 'e'){
     *c = 1;
     return 0;
   } else if(flagStr == 'o'){
@@ -21,7 +21,7 @@ int checkFlags(char flagStr, int * c, int * o, int * i){
     *i = 1;
     return 0;
   }
-  printf("ERROR: flags must be -c,-o, or -i\n");
+  printf("ERROR: flags must be -e,-o, or -i\n");
   return 1;
 }
 
@@ -29,7 +29,7 @@ int checkFlags(char flagStr, int * c, int * o, int * i){
 
 
 
-int argOps(int argc, char * argv[], int * searchWordIndex, int * cFlag,
+int argOps(int argc, char * argv[], int * searchWordIndex, int * eFlag,
            int * oFlag, int * iFlag){
   int searchWordFound = 0; // flag to make sure there is only one search phrase
 
@@ -38,7 +38,7 @@ int argOps(int argc, char * argv[], int * searchWordIndex, int * cFlag,
       if (strlen(argv[i]) != 2){
 	printf("ERROR: flags must be one character long\n");
         return 1; // true, there is an error
-      } else if (checkFlags(argv[i][1], cFlag, oFlag, iFlag) == 1){
+      } else if (checkFlags(argv[i][1], eFlag, oFlag, iFlag) == 1){
         return 1; // 1 is ture, there is an error
       }
     } else if (searchWordFound == 1){
@@ -56,9 +56,27 @@ int argOps(int argc, char * argv[], int * searchWordIndex, int * cFlag,
 
 
 
-int findOcc(char phrase[], int c, int o, int i, char line[],
+int match(int lineIndex, char line[], char phrase, int e, int i){
+  int phraseIndex = 1;
+  while(line[lineIndex] != '\n'){
+    if (phrase[phraseIndex] == '\n'){
+      return lineIndex;
+    }
+    // this may need to be tweaked depending on if # and . next to eachother is valid000000000000000000000000000000000000000000000
+    else if (e == 1 && phrase[phraseIndex] == '#'i && 
+             phrase[phraseIndex+1] != '#' && phrase[phraseIndex+1] != '\n'){
+      phraseIndex++;
+      while(line[lineIndex] != '\n' && line[lineIndex] != phrase[phraseIndex] // UNDER CONSTRUCTION !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+} 
+
+
+
+
+
+int findOcc(char phrase[], int e, int o, int i, char line[],
             int * start, int * stop){
   int index = 0;
+  
   while(index<strlen(line)){
     if (line[index] == '\n'){
       *stop = index;
@@ -76,21 +94,25 @@ int findOcc(char phrase[], int c, int o, int i, char line[],
 
 
 int main(int argc, char * argv[]){
+  if (argc < 2){
+    printf("Requires more command-line arguments.\n");
+    return 1;
+  }
   int searchWordIndex = -1;
-  int cFlag = 0;
+  int eFlag = 0;
   int oFlag = 0;
   int iFlag = 0;
   
   // decyphers argv[]. put flags in an array
   // and get the index of search phrase
   // also identifies any input errors
-  if (argOps(argc, argv, &searchWordIndex, &cFlag, &oFlag, &iFlag) == 1){
+  if (argOps(argc, argv, &searchWordIndex, &eFlag, &oFlag, &iFlag) == 1){
     return 1;
   }
   
   // for testing purposes999999999999999999999999999999999999999999
   printf("Flags:\n");
-  if (cFlag == 1){
+  if (eFlag == 1){
     printf("c\n");
   }
   if (oFlag == 1){
@@ -109,7 +131,7 @@ int main(int argc, char * argv[]){
     int start = 0;
     int stop = 127;
 
-    findOcc(argv[searchWordIndex], cFlag, oFlag, iFlag, buffer,
+    findOcc(argv[searchWordIndex], eFlag, oFlag, iFlag, buffer,
             &start, &stop); 
   }
   return 0;
