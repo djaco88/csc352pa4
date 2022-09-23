@@ -96,6 +96,9 @@ int match(int lineIndex, char line[], char phrase[], int e, int i){
         if (i == 1){
           lineChar = allCaps(lineChar);
         }
+        if(lineChar == '\0'){
+          return -2;
+        } 
       }
     } 
 
@@ -140,6 +143,9 @@ int findOcc(char phrase[], int e, int o, int i, char line[],
 
     if (lineChar == phraseChar){
       result = match(index+1, line, phrase, e, i);
+      if (result == -2){
+        return 0;
+      }
       if(result != -1){
         if (o == 1){
           for (int j = index; j < result; j++){
@@ -232,7 +238,6 @@ int main(int argc, char * argv[]){
     return 2;
   }
   
-
   char buffer[129];
   while (fgets(buffer, 128, stdin) != NULL){
     // create indices to return a section of the
@@ -241,7 +246,7 @@ int main(int argc, char * argv[]){
     int stop = 127;
 
     findOcc(argv[searchWordIndex], eFlag, oFlag, iFlag, buffer,
-            &start, &stop); 
+            &start, &stop);
   }
   return 0;
 }
