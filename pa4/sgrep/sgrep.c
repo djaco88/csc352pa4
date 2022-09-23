@@ -88,6 +88,7 @@ int match(int lineIndex, char line[], char phrase[], int e, int i){
       while(lineChar != '\0'){
         if (lineChar == phraseChar){
           phraseIndex++;
+          lineIndex++;
           break;
         }
         lineIndex++;
