@@ -62,11 +62,14 @@ int match(int lineIndex, char line[], char phrase, int e, int i){
     if (phrase[phraseIndex] == '\n'){
       return lineIndex;
     }
-    // this may need to be tweaked depending on if # and . next to eachother is valid000000000000000000000000000000000000000000000
-    else if (e == 1 && phrase[phraseIndex] == '#'i && 
-             phrase[phraseIndex+1] != '#' && phrase[phraseIndex+1] != '\n'){
+    else if (e == 1 && phrase[phraseIndex] == '#' && 
+             phrase[phraseIndex+1] != '\n'){
       phraseIndex++;
-      while(line[lineIndex] != '\n' && line[lineIndex] != phrase[phraseIndex] // UNDER CONSTRUCTION !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      while(line[lineIndex] != '\n' && line[lineIndex] != phrase[phraseIndex]){
+    //UNDER CONSTRUCTION!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!    
+      }
+    }
+  }
 } 
 
 
@@ -88,6 +91,44 @@ int findOcc(char phrase[], int e, int o, int i, char line[],
   }
   printf("\n");
   return 0;
+}
+
+
+
+
+int checkPhrase(char phrase[]){
+  int index = 0;
+  int flag = 0; //flag to check if there are two # in a row
+  while(phrase[index] !='\n'){
+    // makes sure the input is '.','#', char, or int
+    if (phrase[index] != '.' && phrase[index] != '#'){
+      if(phrase[index] < 'a' || phrase[index] > 'z'){
+        if(phrase[index] > 'Z' || phrase[index] < 'A'){
+          if (phrase[index] < '0' || phrase[index] > '9'){
+            return 1;
+          }
+        }
+      }
+    }else if (phrase[index] == '#'){
+      if (index == 0 || phrase[index + 1] == '\n')
+        return 1;
+      } else if (flag == 1) {
+        return 1;
+      } else {
+        flag = 1;
+      }
+    }else if (phrase[index] == '.'){
+      if (flag == 1){
+        return 1;
+      } else {
+        flag = 1;
+      }
+    } else {
+      flag = 0;
+    }
+    index++;
+  }
+  return 0;
 } 
 
 
@@ -108,6 +149,9 @@ int main(int argc, char * argv[]){
   // also identifies any input errors
   if (argOps(argc, argv, &searchWordIndex, &eFlag, &oFlag, &iFlag) == 1){
     return 1;
+  } else if (checkPhrase(argv[searchWordIndex]) == 1){
+    printf("Invalid search term.\n");
+    return 2;
   }
   
   // for testing purposes999999999999999999999999999999999999999999
