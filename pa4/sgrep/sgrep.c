@@ -165,13 +165,11 @@ int checkPhrase(char phrase[], int e){
   int index = 0;
   int flag = 0; //flag to check if there are two # in a row
   while(phrase[index] !='\0'){
-    printf("checkPhrase: %c\n", phrase[index]);
     // makes sure the input is '.','#', char, or int
     if (phrase[index] != '.' && phrase[index] != '#'){
       if(phrase[index] < 'a' || phrase[index] > 'z'){
         if(phrase[index] > 'Z' || phrase[index] < 'A'){
           if (phrase[index] < '0' || phrase[index] > '9'){
-            printf("%c", phrase[index]);
             printf("HERE");
             return 1;
           }
@@ -234,19 +232,6 @@ int main(int argc, char * argv[]){
     return 2;
   }
   
-  // for testing purposes999999999999999999999999999999999999999999
-  printf("Flags:\n");
-  if (eFlag == 1){
-    printf("c\n");
-  }
-  if (oFlag == 1){
-    printf("o\n");
-  }
-  if (iFlag == 1){
-    printf("i\n");
-  }
-  printf("Search phrase: %s\n", argv[searchWordIndex]);
-  //999999999999999999999999999999999999999999999999999999999999999
 
   char buffer[129];
   while (fgets(buffer, 128, stdin) != NULL){
