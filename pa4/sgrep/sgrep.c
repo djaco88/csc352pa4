@@ -81,12 +81,20 @@ int match(int lineIndex, char line[], char phrase[], int e, int i){
     else if (e == 1 && phraseChar == '#' && 
              phrase[phraseIndex+1] != '\0'){
       phraseIndex++;
+      phraseChar = phrase[phraseIndex];
+      if (i == 1){
+	phraseChar = allCaps(phraseChar);
+      }
       while(lineChar != '\0'){
         if (lineChar == phraseChar){
           phraseIndex++;
           break;
         }
         lineIndex++;
+        lineChar = line[lineIndex];
+        if (i == 1){
+          lineChar = allCaps(lineChar);
+        }
       }
     } 
 
@@ -156,7 +164,7 @@ int checkPhrase(char phrase[], int e){
   int index = 0;
   int flag = 0; //flag to check if there are two # in a row
   while(phrase[index] !='\0'){
-    printf("%c", phrase[index]);
+    printf("checkPhrase: %c\n", phrase[index]);
     // makes sure the input is '.','#', char, or int
     if (phrase[index] != '.' && phrase[index] != '#'){
       if(phrase[index] < 'a' || phrase[index] > 'z'){
@@ -170,6 +178,7 @@ int checkPhrase(char phrase[], int e){
           // flag = 1
         }
       }
+      flag = 0;
     // if we accept '#' and '.' without the -e flag ..................................................
     // the next two if statements need to include '&& e == 1'.........................................
     }else if(phrase[index] == '#'){
@@ -182,7 +191,9 @@ int checkPhrase(char phrase[], int e){
       }
     }else if (phrase[index] == '.'){
       if (flag == 1 || e == 0){
-        return 1;
+        if (phrase[index-1] == '#'){
+          return 1;
+        }
       } else {
         flag = 1;
       }
