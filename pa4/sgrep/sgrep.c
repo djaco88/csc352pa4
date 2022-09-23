@@ -56,13 +56,17 @@ int argOps(int argc, char * argv[], int * searchWordIndex, int * cFlag,
 
 
 
-int findOcc(char phrase[], int c, int o, int i, char line[], char result[]){
-  for(int i = 0; i<strlen(line); i++){
-    if (line[i] == '\n'){
+int findOcc(char phrase[], int c, int o, int i, char line[],
+            int * start, int * stop){
+  int index = 0;
+  while(index<strlen(line)){
+    if (line[index] == '\n'){
+      *stop = index;
       break;
     }
     //test999999999999999999999999999999999999999999999999999999999
-    printf("%c",line[i]);
+    printf("%c",line[index]);
+    index++;
   }
   printf("\n");
   return 0;
@@ -99,9 +103,14 @@ int main(int argc, char * argv[]){
   //999999999999999999999999999999999999999999999999999999999999999
 
   char buffer[129];
-  char result[129];
   while (fgets(buffer, 128, stdin) != NULL){
-    findOcc(argv[searchWordIndex], cFlag, oFlag, iFlag, buffer, result); 
+    // create indices to return a section of the
+    // current line
+    int start = 0;
+    int stop = 127;
+
+    findOcc(argv[searchWordIndex], cFlag, oFlag, iFlag, buffer,
+            &start, &stop); 
   }
   return 0;
 }
