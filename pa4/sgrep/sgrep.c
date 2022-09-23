@@ -10,58 +10,77 @@ Purpose:
 
 
 
-int argOps(int argc, char * argv[], char flags[], int * searchWordIndex){
-  int flagsIndex = 0;
+int checkFlags(char flagStr, int * c, int * o, int * i){
+  if(flagStr == 'c'){
+    *c = 1;
+    return 0;
+  } else if(flagStr == 'o'){
+    *o = 1;
+    return 0;
+  } else if (flagStr == 'i'){
+    *i = 1;
+    return 0;
+  }
+  printf("ERROR: flags must be -c,-o, or -i\n");
+  return 1;
+}
+
+
+
+
+
+int argOps(int argc, char * argv[], int * searchWordIndex, int * cFlag,
+           int * oFlag, int * iFlag){
   int searchWordFound = 0; // flag to make sure there is only one search phrase
 
   for (int i = 1; i < argc; i++){
     if (argv[i][0] == '-'){
       if (strlen(argv[i]) != 2){
-        printf("ERROR: flags must be one character long");
-        return 1; // 1 is true, meaning there was an error
+	printf("ERROR: flags must be one character long\n");
+        return 1; // true, there is an error
+      } else if (checkFlags(argv[i][1], cFlag, oFlag, iFlag) == 1){
+        return 1; // 1 is ture, there is an error
       }
-      flags[flagsIndex] = argv[i][1];
-      flagsIndex++;
-      flags[flagsIndex] = '\n';
     } else if (searchWordFound == 1){
-      printf("ERROR: there can only be flags, one search phrase, and one file");
+      printf("ERROR: there can only be flags, one search phrase, and one file\n");
       return 1; // true, there was an error
     } else {
+      searchWordFound = 1;
       *searchWordIndex = i;
     } 
   }
   return 0;
 }
       
-     
-
 
 
 
 
 int main(int argc, char * argv[]){
-  char flags[argc-1];
-  flags[0]='\n'; // flag to mark the end of the funtions
   int searchWordIndex = -1;
+  int cFlag = 0;
+  int oFlag = 0;
+  int iFlag = 0;
   
   // decyphers argv[]. put flags in an array
   // and get the index of search phrase
-  if (argOps(argc, argv, flags, &searchWordIndex) == 1){
+  // also identifies any input errors
+  if (argOps(argc, argv, &searchWordIndex, &cFlag, &oFlag, &iFlag) == 1){
     return 1;
   }
   
   printf("Flags:\n");
-  for (int i = 0; i < strlen(flags); i++){
-    if (flags[i] == '\n'){
-      break;
-    }
-    printf("%c\n", flags[i]);
+  if (cFlag == 1){
+    printf("c\n");
+  }
+  if (oFlag == 1){
+    printf("o\n");
+  }
+  if (iFlag == 1){
+    printf("i\n");
   }
   printf("Search phrase: %s\n", argv[searchWordIndex]);
-  return 0;// move this
 
-  // TODO: check for valid flags
-  // checkFLags();
 
 /* 
   //get input and send to appropriate function
@@ -74,5 +93,6 @@ int main(int argc, char * argv[]){
     }
   }
 */ 
+  return 0;
 }
 
