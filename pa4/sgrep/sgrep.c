@@ -59,25 +59,36 @@ int argOps(int argc, char * argv[], int * searchWordIndex, int * eFlag,
 int match(int lineIndex, char line[], char phrase[], int e, int i){
   int phraseIndex = 1;
   while(line[lineIndex] != '\0'){
+
     if (phrase[phraseIndex] == '\0'){
       return lineIndex;
     }
+
     else if (e == 1 && phrase[phraseIndex] == '#' && 
              phrase[phraseIndex+1] != '\0'){
       phraseIndex++;
       while(line[lineIndex] != '\0'){
-        if (line[lineIndex] != phrase[phraseIndex]){
+        if (line[lineIndex] == phrase[phraseIndex]){
           phraseIndex++;
           break;
         }
         lineIndex++;
       }
-    } else if(line[lineIndex] == '.' && e == 1){
+    } 
+
+    else if(phrase[lineIndex] == '.' && e == 1){
       phraseIndex++;
-    } else if(line[lineIndex] == phrase[phraseIndex]){
+      lineIndex++;
+    } 
+
+    else if(line[lineIndex] == phrase[phraseIndex]){
       phraseIndex++;
+      lineIndex++;
+    } 
+
+    else {
+      return -1;
     }
-    lineIndex++;
   }
   return -1;
 } 
@@ -97,22 +108,23 @@ int findOcc(char phrase[], int e, int o, int i, char line[],
     } 
     int result = -1;
     if (line[index] == phrase[0]){
-      result = match(index, line, phrase, e, i);
+      result = match(index+1, line, phrase, e, i);
       if(result != -1){
         if (o == 1){
-          for (int j = index; j <= result; j++){
+          for (int j = index; j < result; j++){
             printf("%c", line[j]);
           }
+          printf("\n");
+          index = result;
         } else {
           printf("%s", line);
+          return 0;
         }
-        printf("\n");
-        return 0;
       }
     }
     index++;
   }
-  return 1;
+  return 0;
 }
 
 
