@@ -54,21 +54,35 @@ int argOps(int argc, char * argv[], int * searchWordIndex, int * eFlag,
 
 
 
+char allCaps(char x){
+  if (x >= 97 && 122 >= x){
+      x = x - 32;
+  }
+  return x;
+}
+
+
 
 
 int match(int lineIndex, char line[], char phrase[], int e, int i){
   int phraseIndex = 1;
   while(line[lineIndex] != '\0'){
+    char lineChar = line[lineIndex];
+    char phraseChar = phrase[phraseIndex];
+    if (i == 1){
+      lineChar = allCaps(lineChar);
+      phraseChar = allCaps(phraseChar);
+    }
 
     if (phrase[phraseIndex] == '\0'){
       return lineIndex;
     }
 
-    else if (e == 1 && phrase[phraseIndex] == '#' && 
+    else if (e == 1 && phraseChar == '#' && 
              phrase[phraseIndex+1] != '\0'){
       phraseIndex++;
-      while(line[lineIndex] != '\0'){
-        if (line[lineIndex] == phrase[phraseIndex]){
+      while(lineChar != '\0'){
+        if (lineChar == phraseChar){
           phraseIndex++;
           break;
         }
@@ -76,12 +90,12 @@ int match(int lineIndex, char line[], char phrase[], int e, int i){
       }
     } 
 
-    else if(phrase[lineIndex] == '.' && e == 1){
+    else if(phraseChar == '.' && e == 1){
       phraseIndex++;
       lineIndex++;
     } 
 
-    else if(line[lineIndex] == phrase[phraseIndex]){
+    else if(lineChar == phraseChar){
       phraseIndex++;
       lineIndex++;
     } 
@@ -107,7 +121,15 @@ int findOcc(char phrase[], int e, int o, int i, char line[],
       break;
     } 
     int result = -1;
-    if (line[index] == phrase[0]){
+    char lineChar = line[index];
+    char phraseChar = phrase[0];
+    if (i == 1){
+      lineChar = allCaps(lineChar);
+      phraseChar = allCaps(phraseChar);
+    }
+
+
+    if (lineChar == phraseChar){
       result = match(index+1, line, phrase, e, i);
       if(result != -1){
         if (o == 1){
@@ -175,6 +197,11 @@ int checkPhrase(char phrase[], int e){
 
 
 
+
+
+
+
+
 int main(int argc, char * argv[]){
   if (argc < 2){
     printf("Requires more command-line arguments.\n");
@@ -184,7 +211,7 @@ int main(int argc, char * argv[]){
   int eFlag = 0;
   int oFlag = 0;
   int iFlag = 0;
-  
+   
   // decyphers argv[]. put flags in an array
   // and get the index of search phrase
   // also identifies any input errors
