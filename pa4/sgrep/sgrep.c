@@ -51,7 +51,22 @@ int argOps(int argc, char * argv[], int * searchWordIndex, int * cFlag,
   }
   return 0;
 }
-      
+
+
+
+
+
+int findOcc(char phrase[], int c, int o, int i, char line[], char result[]){
+  for(int i = 0; i<strlen(line); i++){
+    if (line[i] == '\n'){
+      break;
+    }
+    //test999999999999999999999999999999999999999999999999999999999
+    printf("%c",line[i]);
+  }
+  printf("\n");
+  return 0;
+} 
 
 
 
@@ -69,6 +84,7 @@ int main(int argc, char * argv[]){
     return 1;
   }
   
+  // for testing purposes999999999999999999999999999999999999999999
   printf("Flags:\n");
   if (cFlag == 1){
     printf("c\n");
@@ -80,19 +96,13 @@ int main(int argc, char * argv[]){
     printf("i\n");
   }
   printf("Search phrase: %s\n", argv[searchWordIndex]);
+  //999999999999999999999999999999999999999999999999999999999999999
 
-
-/* 
-  //get input and send to appropriate function
   char buffer[129];
+  char result[129];
   while (fgets(buffer, 128, stdin) != NULL){
-    if (delim == 'l'){
-      l(buffer, cols);
-    } else {
-      wAndC(buffer, cols, delim);
-    }
+    findOcc(argv[searchWordIndex], cFlag, oFlag, iFlag, buffer, result); 
   }
-*/ 
   return 0;
 }
 
