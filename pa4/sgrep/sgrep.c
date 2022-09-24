@@ -279,8 +279,8 @@ int main(int argc, char * argv[]){
   }
   
   // try to find matches for input
-  char buffer[129];
-  while (fgets(buffer, 128, stdin) != NULL){
+  char buffer[201];
+  while (fgets(buffer, 200, stdin) != NULL){
     findOcc(argv[searchWordIndex], eFlag, oFlag, iFlag, buffer);
   }
   return 0;
