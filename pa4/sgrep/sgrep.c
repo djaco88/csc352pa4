@@ -211,7 +211,7 @@ int findOcc(char phrase[], int e, int o, int i, char line[]){
 
 
 
-
+// checks the search phrase for any errors
 int checkPhrase(char phrase[], int e){
   int index = 0;
   int flag = 0; //flag to check if there are two # in a row
